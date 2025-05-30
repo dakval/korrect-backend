@@ -8,6 +8,10 @@ import numpy as np
 import pickle
 import re
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 app = FastAPI()
 
 # CORS 허용
@@ -20,7 +24,7 @@ app.add_middleware(
 )
 
 # 환경 변수
-API_KEY = "YOUR_GOOGLE_API_KEY"  # 🔁 반드시 본인 KEY로 교체
+API_KEY = os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=API_KEY)
 gemini_model = genai.GenerativeModel(model_name="models/gemini-2.0-flash")
 

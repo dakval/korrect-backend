@@ -5,3 +5,4 @@ torch
 numpy
 sentence-transformers
 google-generativeai
+python-dotenv
