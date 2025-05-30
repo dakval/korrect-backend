@@ -1,0 +1,10 @@
+# backend/render.yaml
+services:
+  - type: web
+    name: korrect-backend
+    env: python
+    buildCommand: ""
+    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
+    plan: free
+    autoDeploy: true
+

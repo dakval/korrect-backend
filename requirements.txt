@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+hanspell
+pykospacing
+pydantic
