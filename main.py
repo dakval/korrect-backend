@@ -72,7 +72,7 @@ def correct_text(item: SentenceInput):
                 + "\n\n".join(prompt_sentences)
                 + "\n\n각 문장에 대해 하나씩 교정해 주세요. "
                 "문장의 순서는 번호 순서와 같게 해 주세요. "
-                "답변은 번호는 매기지 말고 쭉 이어서 답해 주세요."
+                "답변은 번호는 매기지 말고 하나의 문단으로 답해 주세요."
             )
         elif mode == "casual":
             final_prompt = (
@@ -82,7 +82,7 @@ def correct_text(item: SentenceInput):
                 + "\n\n".join(prompt_sentences)
                 + "\n\n각 문장에 대해 하나씩 교정해 주세요. "
                 "문장의 순서는 번호 순서와 같게 해 주세요. "
-                "답변은 번호는 매기지 말고 쭉 이어서 답해 주세요."
+                "답변은 번호는 매기지 말고 하나의 문단으로 답해 주세요."
             )
         else:
             return {"corrected": "❌ mode는 'formal' 또는 'casual'이어야 합니다."}
