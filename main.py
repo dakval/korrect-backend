@@ -1,9 +1,5 @@
 from pydantic import BaseModel
 
-class SentenceInput(BaseModel):
-    sentence: str
-    mode: str 
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -44,11 +40,13 @@ embedder = SentenceTransformer("jhgan/ko-sroberta-multitask")
 
 class SentenceInput(BaseModel):
     sentence: str
+    mode: str 
 
 @app.post("/api/correct")
 def correct_text(item: SentenceInput):
     try:
         input_sentence = item.sentence
+        mode = item.mode.lower()
         sentences = re.split(r'[!.?]', input_sentence)
         prompt_sentences = []
 
