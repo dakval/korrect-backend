@@ -55,7 +55,7 @@ def correct_text(item: SentenceInput):
             retrieved_chunks = [chunks[idx] for idx in top_results.indices]
 
             ref_text = (
-                f"{i+1}. 문장: {sentence.strip()}\n"
+                f"{i+1}. {sentence.strip()}\n"
                 f"참고 문단:\n" + "\n".join(retrieved_chunks)
             )
             prompt_sentences.append(ref_text)
@@ -65,9 +65,9 @@ def correct_text(item: SentenceInput):
             "temperature를 고려해서 문맥과 말투를 유지하고, "
             "신조어나 틀리지 않은 단어는 그대로 두세요.\n\n"
             + "\n\n".join(prompt_sentences)
-            + "\n\n각 문장에 대해 '문장:'으로 시작하는 줄마다 하나씩 교정해 주세요. "
+            + "\n\n각 문장에 대해 하나씩 교정해 주세요. "
             "문장의 순서는 번호 순서와 같게 해 주세요. "
-            "답변은 번호는 매기지 말고 '문장 :'을 제거하고 쭉 이어서 답해 주세요."
+            "답변은 번호는 매기지 말고 쭉 이어서 답해 주세요."
         )
 
 
