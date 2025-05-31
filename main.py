@@ -1,3 +1,9 @@
+from pydantic import BaseModel
+
+class SentenceInput(BaseModel):
+    sentence: str
+    mode: str 
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -60,16 +66,28 @@ def correct_text(item: SentenceInput):
             )
             prompt_sentences.append(ref_text)
 
-        final_prompt = (
-            "다음 문장과 문단을 참고해서 맞춤법을 교정해 주세요. "
-            "temperature를 고려해서 문맥과 말투를 유지하고, "
-            "신조어나 틀리지 않은 단어는 그대로 두세요.\n\n"
-            + "\n\n".join(prompt_sentences)
-            + "\n\n각 문장에 대해 '문장:'으로 시작하는 줄마다 하나씩 교정해 주세요. "
-            "문장의 순서는 번호 순서와 같게 해 주세요. "
-            "답변은 번호는 매기지 말고 '문장 :'을 제거하고 쭉 이어서 답해 주세요."
-        )
-
+        if mode == "formal":
+            final_prompt = (
+                "다음 문장과 문단을 참고해서 맞춤법을 교정해 주세요. "
+                "temperature를 고려해서 **보고서에 쓸 법한 어투**로 교정해 주세요. "
+                "신조어나 틀리지 않은 단어는 그대로 두세요.\n\n"
+                + "\n\n".join(prompt_sentences)
+                + "\n\n각 문장에 대해 하나씩 교정해 주세요. "
+                "문장의 순서는 번호 순서와 같게 해 주세요. "
+                "답변은 번호는 매기지 말고 쭉 이어서 답해 주세요."
+            )
+        elif mode == "casual":
+            final_prompt = (
+                "다음 문장과 문단을 참고해서 맞춤법을 교정해 주세요. "
+                "temperature를 고려해서 **일상적인 말투를 유지하면서 자연스럽게** 교정해 주세요. "
+                "신조어나 틀리지 않은 단어는 그대로 두세요.\n\n"
+                + "\n\n".join(prompt_sentences)
+                + "\n\n각 문장에 대해 하나씩 교정해 주세요. "
+                "문장의 순서는 번호 순서와 같게 해 주세요. "
+                "답변은 번호는 매기지 말고 쭉 이어서 답해 주세요."
+            )
+        else:
+            return {"corrected": "❌ mode는 'formal' 또는 'casual'이어야 합니다."}
 
         response = gemini_model.generate_content(
             final_prompt,
