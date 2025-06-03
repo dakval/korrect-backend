@@ -93,8 +93,9 @@ def correct_text(item: SentenceInput):
                 "신조어나 틀리지 않은 단어는 그대로 두세요.\n\n"
                 + "\n\n".join(prompt_sentences)
                 + "\n\n각 문장에 대해 하나씩 교정해 주세요. "
+                "참고 문단은 답변에서 제외하세요."
                 "문장의 순서는 번호 순서와 같게 해 주세요. "
-                "답변은 번호는 매기지 말고 하나의 문단으로 답해 주세요."
+                "답변은 번호와 개행 없이 쭉 이어서 해 주세요."
             )
         else:
             return {"corrected": "❌ mode는 'formal' 또는 'casual'이어야 합니다."}
