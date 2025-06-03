@@ -42,24 +42,35 @@ class SentenceInput(BaseModel):
     sentence: str
     mode: str 
 
+def split_sen(sentence):
+    splitted = []
+    start = 0
+    length = len(sentence)
+    for i in range(length):
+        if sentence[i] in ['.', '?', '!']:
+            splitted.append(sentence[start:i + 1])
+            start = i + 1
+    if start < length:
+        splitted.append(sentence[start:])  # 마지막 구절 포함
+    return [s.strip() for s in splitted if s.strip()]
+
+
 @app.post("/api/correct")
 def correct_text(item: SentenceInput):
     try:
         input_sentence = item.sentence
         mode = item.mode.lower()
-        sentences = re.split(r'[!.?]', input_sentence)
+        sentences = split_sen(input_sentence)  # 변경된 분리 방식
         prompt_sentences = []
 
         for i, sentence in enumerate(sentences):
-            if not sentence.strip():
-                continue
             question_embedding = embedder.encode(sentence, convert_to_tensor=True).cpu()
             cos_scores = util.cos_sim(question_embedding, embeddings_tensor)[0]
             top_results = torch.topk(cos_scores, k=3)
             retrieved_chunks = [chunks[idx] for idx in top_results.indices]
 
             ref_text = (
-                f"{i+1}. 문장: {sentence.strip()}\n"
+                f"{i + 1}. {sentence.strip()}\n"
                 f"참고 문단:\n" + "\n".join(retrieved_chunks)
             )
             prompt_sentences.append(ref_text)
@@ -70,9 +81,10 @@ def correct_text(item: SentenceInput):
                 "temperature를 고려해서 **보고서에 쓸 법한 어투**로 교정해 주세요. "
                 "신조어나 틀리지 않은 단어는 그대로 두세요.\n\n"
                 + "\n\n".join(prompt_sentences)
-                + "\n\n각 문장에 대해 하나씩 교정해 주세요. "
+                + "\n\n번호가 매겨진 각 문장에 대해 하나씩 교정해 주세요. "
+                "참고 문단은 답변에서 제외하세요. "
                 "문장의 순서는 번호 순서와 같게 해 주세요. "
-                "답변은 번호는 매기지 말고 하나의 문단으로 답해 주세요."
+                "답변은 번호와 개행 없이 쭉 이어서 해 주세요."
             )
         elif mode == "casual":
             final_prompt = (
@@ -93,7 +105,18 @@ def correct_text(item: SentenceInput):
         )
 
         if response and response.text:
-            return {"corrected": response.text}
+            full_text = response.text
+            corrected_sentences = []
+            for i in range(len(sentences)):
+                try:
+                    part = full_text.split(f"{i + 1}.")[1]
+                    if i < len(sentences) - 1:
+                        part = part.split(f"{i + 2}.")[0]
+                    corrected = split_sen(part)[0].strip()
+                except Exception:
+                    corrected = sentences[i]
+                corrected_sentences.append(corrected + " ")
+            return {"corrected": "".join(corrected_sentences).strip()}
         else:
             return {"corrected": "⚠️ 교정 결과를 받아오지 못했습니다."}
 
