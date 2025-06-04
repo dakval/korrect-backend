@@ -89,6 +89,7 @@ def correct_text(item: SentenceInput):
         elif mode == "casual":
             final_prompt = (
                 "다음 문장과 문단을 참고하여 띄어쓰기와 맞춤법을 원칙에 기반하여 교정해 주세요. "
+                "한 단어인지 확인할 때는 국립국어원의 표준국어대사전을 활용해 주세요."
                 "temperature를 고려해서 말투는 건들지 말아 주세요. "
                 # "신조어나 틀리지 않은 단어는 그대로 두세요.\n\n"
                 + "\n\n".join(prompt_sentences)
