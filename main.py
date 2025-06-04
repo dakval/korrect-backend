@@ -88,7 +88,7 @@ def correct_text(item: SentenceInput):
             )
         elif mode == "casual":
             final_prompt = (
-                "다음 문장과 문단을 참고해서 맞춤법을 원칙에 기반하여 교정해 주세요. "
+                "다음 문장과 문단을 참고하여 띄어쓰기와 맞춤법만만 원칙에 기반하여 교정해 주세요. "
                 "temperature를 고려해서 문맥과 말투를 유지해 주세요. "
                 "신조어나 틀리지 않은 단어는 그대로 두세요.\n\n"
                 + "\n\n".join(prompt_sentences)
