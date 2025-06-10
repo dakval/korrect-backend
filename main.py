@@ -78,7 +78,7 @@ def correct_text(item: SentenceInput):
         if mode == "formal":
             final_prompt = (
                 "다음 문장과 문단을 참고해서 맞춤법을 교정해 주세요. "
-                "temperature를 고려해서 **보고서에 쓸 법한 어투**로 교정해 주세요. "
+                "temperature를 고려해서 보고서에 쓸 법한 어투로 교정해 주세요. "
                 "신조어나 틀리지 않은 단어는 그대로 두세요.\n\n"
                 + "\n\n".join(prompt_sentences)
                 + "\n\n번호가 매겨진 각 문장에 대해 하나씩 교정해 주세요. "
@@ -88,8 +88,8 @@ def correct_text(item: SentenceInput):
             )
         elif mode == "casual":
             final_prompt = (
-                "다음 문장과 문단을 참고해서 맞춤법을 원칙에 기반하여 교정해 주세요. "
-                "temperature를 고려해서 문맥과 말투를 유지해 주세요요. "
+                "다음 문장과 문단을 참고하여 띄어쓰기와 맞춤법을 원칙에 기반하여 교정해 주세요. "
+                "temperature를 고려해서 문맥과 말투를 유지해 주세요. "
                 "신조어나 틀리지 않은 단어는 그대로 두세요.\n\n"
                 + "\n\n".join(prompt_sentences)
                 + "\n\n각 문장에 대해 하나씩 교정해 주세요. "
